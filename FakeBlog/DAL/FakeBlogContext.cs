@@ -10,6 +10,5 @@ namespace FakeBlog.DAL
     public class FakeBlogContext
     {
         public virtual DbSet<Post> Posts { get; set; }
-        public virtual DbSet<Author> Authors { get; set; }
     }
 }
