@@ -22,7 +22,9 @@ namespace FakeBlog.DAL
 
         public void AddPost(string Title, ApplicationUser owner)
         {
-            throw new NotImplementedException();
+            Post post = new Post { PostId = 1, Owner = "The Title" };
+            Context.Posts.Add(post);
+            //Context.SaveChanges();
         }
 
         public bool EditPost(string postId)
@@ -30,12 +32,12 @@ namespace FakeBlog.DAL
             throw new NotImplementedException();
         }
 
-        public Post GetPost(string postId)
+        public Post GetPost(int postId)
         {
-            throw new NotImplementedException();
+            return Context.Posts.FirstOrDefault(p => p.PostId == postId);
         }
 
-        public List<Post> GetPostsFromAuthor(string authorId)
+        public List<Post> GetPostsFromUser(string authorId)
         {
             throw new NotImplementedException();
         }

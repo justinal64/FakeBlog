@@ -7,7 +7,7 @@ using System.Web;
 
 namespace FakeBlog.DAL
 {
-    public class FakeBlogContext
+    public class FakeBlogContext : ApplicationDbContext
     {
         public virtual DbSet<Post> Posts { get; set; }
     }

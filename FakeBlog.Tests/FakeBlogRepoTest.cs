@@ -7,136 +7,136 @@ using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
 
-namespace FakeTrello.Tests.DAL
+namespace FakeBlog.Tests.DAL
 {
     [TestClass]
     public class FakeTrelloRepoTests
     {
         public Mock<FakeBlogContext> fakeContext { get; set; }
         public FakeBlogRepository repo { get; set; }
-        public Mock<DbSet<Post>> mockPostsSet { get; set; }
+        public Mock<DbSet<Post>> mockPostSet { get; set; }
+        public IQueryable<Post> queryPost { get; set; }
+        public List<Post> fakePostTable { get; set; }
         public ApplicationUser sally { get; set; }
         public ApplicationUser sammy { get; set; }
 
         [TestInitialize]
         public void Setup()
         {
-            //fakeBoardTable = new List<Post>();
-            //fakeContext = new Mock<FakeTrelloContext>();
-            //mockBoardsSet = new Mock<DbSet<Board>>();
-            //repo = new FakeTrelloRepository(fakeContext.Object);
-            //sally = new ApplicationUser { Id = "sally-id-1" };
-            //sammy = new ApplicationUser { Id = "sammy-id-1" };
+            fakePostTable = new List<Post>();
+            fakeContext = new Mock<FakeBlogContext>();
+            mockPostSet = new Mock<DbSet<Post>>();
+            repo = new FakeBlogRepository(fakeContext.Object);
+            sally = new ApplicationUser { Id = "sally-id-1" };
+            sammy = new ApplicationUser { Id = "sammy-id-1" };
         }
 
         public void CreateFakeDatabase()
         {
-            //queryBoards = fakeBoardTable.AsQueryable(); // Re-express this list as something that understands queries
+            queryPost = fakePostTable.AsQueryable(); // Re-express this list as something that understands queries
 
             //// Hey LINQ, use the Provider from our *cough* fake *cough* board table/list
-            //mockBoardsSet.As<IQueryable<Board>>().Setup(b => b.Provider).Returns(queryBoards.Provider);
-            //mockBoardsSet.As<IQueryable<Board>>().Setup(b => b.Expression).Returns(queryBoards.Expression);
-            //mockBoardsSet.As<IQueryable<Board>>().Setup(b => b.ElementType).Returns(queryBoards.ElementType);
-            //mockBoardsSet.As<IQueryable<Board>>().Setup(b => b.GetEnumerator()).Returns(() => queryBoards.GetEnumerator());
+            mockPostSet.As<IQueryable<Post>>().Setup(b => b.Provider).Returns(queryPost.Provider);
+            mockPostSet.As<IQueryable<Post>>().Setup(b => b.Expression).Returns(queryPost.Expression);
+            mockPostSet.As<IQueryable<Post>>().Setup(b => b.ElementType).Returns(queryPost.ElementType);
+            mockPostSet.As<IQueryable<Post>>().Setup(b => b.GetEnumerator()).Returns(() => queryPost.GetEnumerator());
 
-            //mockBoardsSet.Setup(b => b.Add(It.IsAny<Board>())).Callback((Board board) => fakeBoardTable.Add(board));
-            //mockBoardsSet.Setup(b => b.Remove(It.IsAny<Board>())).Callback((Board board) => fakeBoardTable.Remove(board));
+            mockPostSet.Setup(b => b.Add(It.IsAny<Post>())).Callback((Post post) => fakePostTable.Add(post));
+            mockPostSet.Setup(b => b.Remove(It.IsAny<Post>())).Callback((Post post) => fakePostTable.Remove(post));
 
-            //fakeContext.Setup(c => c.Boards).Returns(mockBoardsSet.Object); // Context.Boards returns fakeBoardTable (a list)
+            fakeContext.Setup(c => c.Posts).Returns(mockPostSet.Object); // Context.Boards returns fakeBoardTable (a list)
         }
 
         [TestMethod]
         public void EnsureICanCreateInstanceofRepo()
         {
-            //FakeTrelloRepository repo = new FakeTrelloRepository();
+            FakeBlogRepository repo = new FakeBlogRepository();
 
-            //Assert.IsNotNull(repo);
+            Assert.IsNotNull(repo);
         }
 
-        //[TestMethod]
-        //public void EnsureIHaveNotNullContext()
-        //{
-        //    FakeTrelloRepository repo = new FakeTrelloRepository();
+        [TestMethod]
+        public void EnsureIHaveNotNullContext()
+        {
+            FakeBlogRepository repo = new FakeBlogRepository();
 
-        //    Assert.IsNotNull(repo.Context);
-        //}
+            Assert.IsNotNull(repo.Context);
+        }
 
-        //[TestMethod]
-        //public void EnsureICanInjectContextInstance()
-        //{
-        //    FakeTrelloContext context = new FakeTrelloContext();
-        //    FakeTrelloRepository repo = new FakeTrelloRepository(context);
+        [TestMethod]
+        public void EnsureICanInjectContextInstance()
+        {
+            FakeBlogContext context = new FakeBlogContext();
+            FakeBlogRepository repo = new FakeBlogRepository(context);
 
-        //    Assert.IsNotNull(repo.Context);
-        //}
+            Assert.IsNotNull(repo.Context);
+        }
 
-        //[TestMethod]
-        //public void EnsureICanAddBoard()
-        //{
-        //    // Arrange
-        //    CreateFakeDatabase();
+        [TestMethod]
+        public void EnsureICanAddPost()
+        {
+            // Arrange
+            CreateFakeDatabase();
 
-        //    ApplicationUser a_user = new ApplicationUser
-        //    {
-        //        Id = "my-user-id",
-        //        UserName = "Sammy",
-        //        Email = "sammy@gmail.com"
-        //    };
+            ApplicationUser aUser = new ApplicationUser {
+                Id = "my-user-id",
+                UserName = "Sammy",
+                Email = "sammy@gmail.com"
+            };
 
-        //    // Act
-        //    repo.AddBoard("My Board", a_user);
+            // Act
+            repo.AddPost("My Board", aUser);
 
-        //    // Assert
-        //    Assert.AreEqual(1, repo.Context.Boards.Count());
-        //}
+            //// Assert
+            Assert.AreEqual(1, repo.Context.Posts.Count());
+        }
 
-        //[TestMethod]
-        //public void EnsureICanReturnBoards()
-        //{
-        //    // Arrange
-        //    fakeBoardTable.Add(new Board { Name = "My Board" });
-        //    CreateFakeDatabase();
+        [TestMethod]
+        public void EnsureICanReturnPost()
+        {
+            // Arrange
+            fakePostTable.Add(new Post { PostId = 1, Owner = "Justin Leggett" });
+            CreateFakeDatabase();
 
-        //    // Act
-        //    int expected_board_count = 1;
-        //    int actual_board_count = repo.Context.Boards.Count();
+            // Act
+            int expectedBoardCount = 1;
+            int actualBoardCount = repo.Context.Posts.Count();
 
-        //    // Assert
-        //    Assert.AreEqual(expected_board_count, actual_board_count);
-        //}
+            // Assert
+            Assert.AreEqual(expectedBoardCount, actualBoardCount);
+        }
 
-        //[TestMethod]
-        //public void EnsureICanFindABoard()
-        //{
-        //    // Arrange
-        //    fakeBoardTable.Add(new Board { BoardId = 1, Name = "My Board" });
-        //    CreateFakeDatabase();
+        [TestMethod]
+        public void EnsureICanFindAPost()
+        {
+            // Arrange
+            fakePostTable.Add(new Post { PostId = 1, Owner = "Justin Leggett" });
+            CreateFakeDatabase();
 
-        //    // Act
-        //    string expected_board_name = "My Board";
-        //    Board actual_board = repo.GetBoard(1);
-        //    string actual_board_name = repo.GetBoard(1).Name;
+            // Act
+            string expectedBoardName = "Justin Leggett";
+            Post actualPost = repo.GetPost(1);
+            string actualBoardName = repo.GetPost(1).Owner;
 
-        //    // Assert
-        //    Assert.IsNotNull(actual_board);
-        //    Assert.AreEqual(expected_board_name, actual_board_name);
-        //}
+            Assert.IsNotNull(actualPost);
+            Assert.AreEqual(expectedBoardName, actualBoardName);
+        }
 
-        //[TestMethod]
-        //public void EnsureICanGetUserBoards()
-        //{
-        //    // Arrange
-        //    fakeBoardTable.Add(new Board { BoardId = 1, Name = "My Board", Owner = sally });
-        //    fakeBoardTable.Add(new Board { BoardId = 2, Name = "My Board", Owner = sally });
-        //    fakeBoardTable.Add(new Board { BoardId = 3, Name = "My Board", Owner = sammy });
-        //    CreateFakeDatabase();
-        //    // Act 
-        //    int expectedBoardCount = 2;
-        //    int actualBoardCount = repo.GetBoardsFromUser(sally.Id).Count();
+        [TestMethod]
+        public void EnsureICanGetUserPosts()
+        {
+            // Arrange
+            fakePostTable.Add(new Post { PostId = 1, Owner = "Justin Leggett" });
+            fakePostTable.Add(new Post { PostId = 2, Owner = "Justin Leggett" });
+            fakePostTable.Add(new Post { PostId = 3, Owner = "Justin Leggett" });
+            CreateFakeDatabase();
+            // Act 
+            int expectedBoardCount = 3;
+            int actualBoardCount = repo.GetPostsFromUser(sally.Id).Count();
 
-        //    // Assert
-        //    Assert.AreEqual(expectedBoardCount, actualBoardCount);
-        //}
+            // Assert
+            Assert.AreEqual(expectedBoardCount, actualBoardCount);
+        }
 
         //[TestMethod]
         //public void EnsureICanRemoveBoard()

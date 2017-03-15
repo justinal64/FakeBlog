@@ -14,8 +14,8 @@ namespace FakeBlog.DAL
         void AddPost(string Title, ApplicationUser owner);
 
         // Read
-        Post GetPost(string postId);
-        List<Post> GetPostsFromAuthor(string authorId);
+        Post GetPost(int postId);
+        List<Post> GetPostsFromUser(string authorId);
 
         // Update
         bool EditPost(string postId); // true: successful, false: not successful

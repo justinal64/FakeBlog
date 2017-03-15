@@ -10,7 +10,7 @@ namespace FakeBlog.Models
 
         [Required]
         [MinLength(3)]
-        public string Title { get; set; }
+        public string Owner { get; set; }
 
         public DateTime DateCreated { get; set; } // Required by default
         public DateTime PublishedAt { get; set; }
