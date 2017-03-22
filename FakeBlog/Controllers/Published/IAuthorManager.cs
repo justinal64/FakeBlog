@@ -9,7 +9,7 @@ namespace FakeBlog.Controllers.Published
     interface IAuthorManager
     {
         void AddAuthor(int authorId, string fullName);
-        void EditAuthor(int authorId);
+        void EditAuthor(int authorId, string title);
         void DeleteAuthor(int authorId);
     }
 }

@@ -9,7 +9,7 @@ namespace FakeBlog.Controllers.Published
 {
     interface IAuthorQuery
     {
-        List<Author> GetPostsByAuthor(int authorId);
+        List<Post> GetPostsByAuthor(int authorId);
         Author GetAuthor(int authorId);
     }
 }
