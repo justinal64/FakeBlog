@@ -27,7 +27,7 @@ namespace FakeBlog.DAL.Repository
             {
 
                 var addBoardCommand = _blogConnection.CreateCommand();
-                addBoardCommand.CommandText = $"Insert into Post(Name, Owner_Id) values(@authrId, @fullname)";
+                addBoardCommand.CommandText = $"Insert into Post(Name, Owner_Id) values(@authorId, @fullname)";
                 // name parameter
                 var authorIdParameter = new SqlParameter("authorId", SqlDbType.Int);
                 authorIdParameter.Value = authorId;
